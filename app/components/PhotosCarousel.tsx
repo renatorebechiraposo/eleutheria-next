@@ -122,38 +122,40 @@ const photos = [
 
 export default function PhotosCarousel() {
   return (
-    <div className="py-16 bg-gray-50">
-      <h3 className="text-3xl font-bold text-center mb-12">
-        Fotos Eleutheria 2024
-      </h3>
-      <div className="custom-carousel-container max-w-10xl mx-auto">
-        <Swiper
-          modules={[Autoplay]}
-          spaceBetween={20}
-          slidesPerView={1}
-          breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-          autoplay={{ delay: 5000 }}
-          className="h-full max-w-7xl mx-auto px-4"
-        >
-          {photos.map((photo, index) => (
-            <SwiperSlide key={index}>
-              <div className="bg-white rounded-xl shadow-lg p-6 mx-2 h-full">
-                <Image
-                  src={photo.image}
-                  alt={photo.alt}
-                  width={500}
-                  height={500}
-                  className="object-cover"
-                />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+    <section id="Fotos">
+      <div className="py-16 bg-gray-50">
+        <h3 className="text-3xl font-bold text-center mb-12">
+          Fotos Eleutheria 2024
+        </h3>
+        <div className="custom-carousel-container max-w-10xl mx-auto">
+          <Swiper
+            modules={[Autoplay]}
+            spaceBetween={20}
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+            autoplay={{ delay: 5000 }}
+            className="h-full max-w-7xl mx-auto px-4"
+          >
+            {photos.map((photo, index) => (
+              <SwiperSlide key={index}>
+                <div className="bg-white rounded-xl shadow-lg p-6 mx-2 h-full">
+                  <Image
+                    src={photo.image}
+                    alt={photo.alt}
+                    width={500}
+                    height={500}
+                    className="object-cover"
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
