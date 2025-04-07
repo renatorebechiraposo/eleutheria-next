@@ -3,8 +3,8 @@ import CountdownTimer from "./components/CountdownTimer";
 import TestimonialCarousel from "./components/TestimonialCarousel";
 import PhotosCarousel from "./components/PhotosCarousel";
 import Header from "./components/Header";
-import Link from "next/link";
 import Footer from "./components/Footer";
+import Contato from "./components/Contato";
 
 export default function Home() {
   return (
@@ -161,19 +161,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section
-        id="Contato"
-        className="flex items-center justify-center py-16 bg-gray-50"
-      >
-        <div>
-          <h3 className="text-3xl font-bold text-center mb-12">Contato</h3>
-          <Link href="https://wa.me/19981097482">
-            <h2 className="w-sm bg-green-600 text-white px-4 py-4 rounded-full hover:bg-green-700 transition-colors text-2xl font-semibold flex items-center justify-center">
-              Contatar o Organizador
-            </h2>
-          </Link>
-        </div>
-      </section>
+      {/* Seção Contato */}
+      <Contato />
 
       {/* Footer */}
       <Footer />
