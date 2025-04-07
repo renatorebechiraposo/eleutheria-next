@@ -1,6 +1,6 @@
 import React from "react";
 
-function Localizacao() {
+export default function Localizacao() {
   return (
     <section id="Local">
       <div className="py-16 px-4">
@@ -17,5 +17,3 @@ function Localizacao() {
     </section>
   );
 }
-
-export default Localizacao;

@@ -3,7 +3,7 @@ import { FaWhatsapp, FaFacebookF, FaInstagram } from "react-icons/fa";
 
 import React from "react";
 
-function Footer() {
+export default function Footer() {
   return (
     <footer className="bg-[#08220d] text-white py-8 px-4">
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between">
@@ -45,4 +45,3 @@ function Footer() {
     </footer>
   );
 }
-export default Footer;

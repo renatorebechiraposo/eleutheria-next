@@ -2,6 +2,7 @@
 import Link from "next/link";
 import FormField from "../components/FormField";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
+import FloatingWhatsAppButton from "../components/FloatingWhatsAppButton";
 
 export default function FormularioPage() {
   return (
@@ -289,6 +290,7 @@ export default function FormularioPage() {
             Voltar para a página inicial
           </Link>
         </div>
+        <FloatingWhatsAppButton />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-function Contato() {
+export default function Contato() {
   return (
     <section
       id="Contato"
@@ -18,5 +18,3 @@ function Contato() {
     </section>
   );
 }
-
-export default Contato;
