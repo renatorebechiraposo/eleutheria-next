@@ -1,5 +1,9 @@
 "use client";
-import { InputHTMLAttributes, SelectHTMLAttributes } from "react";
+import {
+  InputHTMLAttributes,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+} from "react";
 
 type FormFieldProps =
   | ({
@@ -7,6 +11,12 @@ type FormFieldProps =
       label: string;
       required?: boolean;
     } & InputHTMLAttributes<HTMLInputElement>)
+  | ({
+      as: "textarea";
+      label: string;
+      required?: boolean;
+      rows?: number;
+    } & TextareaHTMLAttributes<HTMLTextAreaElement>)
   | ({
       as: "select";
       label: string;
@@ -50,6 +60,13 @@ export default function FormField(props: FormFieldProps) {
             </option>
           ))}
         </select>
+      ) : props.as === "textarea" ? (
+        <textarea
+          {...props}
+          rows={props.rows || 3}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                   focus:border-blue-500 focus:ring-blue-500 p-2 resize-y"
+        />
       ) : props.as === "radio" ? (
         <div className="flex gap-4">
           {props.options?.map((option) => (

@@ -3,8 +3,65 @@ import Link from "next/link";
 import FormField from "../components/FormField";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import FloatingWhatsAppButton from "../components/FloatingWhatsAppButton";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function FormularioPage() {
+  const router = useRouter();
+  const [birthdate, setBirthdate] = useState("");
+  const [ageError, setAgeError] = useState("");
+
+  const calculateAge = (birthDate: Date) => {
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+    return age;
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const date = e.target.value;
+    setBirthdate(date);
+
+    if (date) {
+      const birthDate = new Date(date);
+      const age = calculateAge(birthDate);
+
+      if (age < 14) {
+        setAgeError(
+          "Você deve ter pelo menos 14 anos completos para se inscrever",
+        );
+      } else {
+        setAgeError("");
+      }
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!birthdate) {
+      setAgeError("Por favor, insira sua data de nascimento");
+      return;
+    }
+
+    const birthDate = new Date(birthdate);
+    const age = calculateAge(birthDate);
+
+    if (age < 14) {
+      setAgeError("Inscrição permitida apenas para maiores de 14 anos");
+      return;
+    }
+
+    // Resto da lógica de envio do formulário
+    router.push("/success");
+  };
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 flex items-center justify-center">
       <div className="bg-white shadow-xl rounded-lg p-6 w-full max-w-2xl">
@@ -85,6 +142,8 @@ export default function FormularioPage() {
             id="data_nascimento"
             name="entry."
             required
+            value={birthdate}
+            onChange={handleDateChange}
           />
 
           {/* Campo Sexo */}
@@ -111,6 +170,14 @@ export default function FormularioPage() {
             inputMode="numeric"
             pattern="^[-() 0-9]+$"
             placeholder="Ex: (19) 99999-9999"
+            onInput={(e: React.FormEvent<HTMLInputElement>) => {
+              e.currentTarget.value = e.currentTarget.value
+                .replace(/\D/g, "") // Remove tudo que não é dígito
+                .replace(/(\d{2})(\d)/, "($1) $2") // Coloca parênteses around DDD
+                .replace(/(\d{5})(\d)/, "$1-$2") // Celular com 5 dígitos antes do hífen
+                .replace(/(-\d{4})\d+?$/, "$1") // Limita a 4 dígitos após o hífen
+                .substring(0, 15); // Limita o tamanho máximo
+            }}
           />
 
           {/* WhatsApp Responsavel*/}
@@ -124,16 +191,101 @@ export default function FormularioPage() {
             inputMode="numeric"
             pattern="^[-() 0-9]+$"
             placeholder="Ex: (19) 99999-9999"
+            onInput={(e: React.FormEvent<HTMLInputElement>) => {
+              e.currentTarget.value = e.currentTarget.value
+                .replace(/\D/g, "") // Remove tudo que não é dígito
+                .replace(/(\d{2})(\d)/, "($1) $2") // Coloca parênteses around DDD
+                .replace(/(\d{5})(\d)/, "$1-$2") // Celular com 5 dígitos antes do hífen
+                .replace(/(-\d{4})\d+?$/, "$1") // Limita a 4 dígitos após o hífen
+                .substring(0, 15); // Limita o tamanho máximo
+            }}
           />
 
-          {/* Endereço completo */}
-          <FormField
-            label="Endereço completo:"
-            type="text"
-            id="endereco"
-            name="entry."
-            required
-          />
+          {/* Seção de Endereço */}
+          <h3 className="text-lg font-semibold">Endereço Completo</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Rua */}
+            <FormField
+              label="Rua"
+              type="text"
+              id="rua"
+              name="entry.rua"
+              required
+              placeholder="Ex: Rua das Flores"
+            />
+
+            {/* Número */}
+            <FormField
+              label="Número"
+              type="number"
+              id="numero"
+              name="entry.numero"
+              required
+              min="1"
+              placeholder="Ex: 123"
+            />
+
+            {/* Complemento */}
+            <FormField
+              label="Complemento"
+              type="text"
+              id="complemento"
+              name="entry.complemento"
+              placeholder="Ex: Apt 45, Bloco B"
+            />
+
+            {/* Bairro */}
+            <FormField
+              label="Bairro"
+              type="text"
+              id="bairro"
+              name="entry.bairro"
+              required
+              placeholder="Ex: Centro"
+            />
+
+            {/* Cidade */}
+            <FormField
+              label="Cidade"
+              type="text"
+              id="cidade"
+              name="entry.cidade"
+              required
+              placeholder="Ex: Hortolândia"
+            />
+
+            {/* Estado */}
+            <FormField
+              label="Estado"
+              as="select"
+              id="estado"
+              name="entry.estado"
+              required
+              options={[
+                { value: "SP", label: "São Paulo" },
+                { value: "RJ", label: "Rio de Janeiro" },
+                // Adicione todos os estados
+              ]}
+            />
+
+            {/* CEP */}
+            <FormField
+              label="CEP"
+              type="text"
+              id="cep"
+              name="entry.cep"
+              required
+              inputMode="numeric"
+              pattern="[0-9]{5}-?[0-9]{3}"
+              placeholder="Ex: 12345-678"
+              onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                e.currentTarget.value = e.currentTarget.value
+                  .replace(/\D/g, "")
+                  .replace(/(\d{5})(\d)/, "$1-$2")
+                  .substring(0, 9);
+              }}
+            />
+          </div>
 
           {/* Religião */}
           <FormField
@@ -147,7 +299,7 @@ export default function FormularioPage() {
           {/* Sacamentos */}
           <FormField
             label="Quais Sacramentos possui?:"
-            as="checkbox"
+            as="select"
             id="sacramentos"
             name="entry."
             required
@@ -206,7 +358,8 @@ export default function FormularioPage() {
           {/* Medicamento Controlado */}
           <FormField
             label="Faz uso de medicamento controlado?"
-            type="text"
+            as="textarea"
+            rows={4}
             id="medicamento_controlado"
             name="entry."
             required
@@ -241,6 +394,14 @@ export default function FormularioPage() {
             id="contato_emergencia"
             name="entry."
             required
+            onInput={(e: React.FormEvent<HTMLInputElement>) => {
+              e.currentTarget.value = e.currentTarget.value
+                .replace(/\D/g, "") // Remove tudo que não é dígito
+                .replace(/(\d{2})(\d)/, "($1) $2") // Coloca parênteses around DDD
+                .replace(/(\d{5})(\d)/, "$1-$2") // Celular com 5 dígitos antes do hífen
+                .replace(/(-\d{4})\d+?$/, "$1") // Limita a 4 dígitos após o hífen
+                .substring(0, 15); // Limita o tamanho máximo
+            }}
           />
 
           {/* Como conheceu o Eleutheria? */}
@@ -272,10 +433,19 @@ export default function FormularioPage() {
             ]}
           />
 
+          {ageError && (
+            <div className="text-red-600 text-sm mt-1 p-2 bg-red-50 rounded-lg">
+              {ageError}
+            </div>
+          )}
+
           {/* Botão de Envio */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            disabled={!!ageError}
+            className={`w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+              ageError ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+            }`}
           >
             Enviar
           </button>
